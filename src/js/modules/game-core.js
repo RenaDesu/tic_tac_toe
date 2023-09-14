@@ -1,8 +1,13 @@
+import {
+    clearStats
+} from "./localstorage";
+
 const winner = document.querySelector('[data-winner]');
 const cells = document.querySelectorAll('.table__cell');
 const gameBoard = document.querySelector('[data-game-board]');
 const currentPlayer = document.querySelector('[data-player]');
 const restartBtn = document.querySelector('[data-restart]');
+const clearStatsBtn = document.querySelector('[data-clear]');
 
 //Игрок по умолчанию
 let player = 'X';
@@ -80,7 +85,6 @@ function detectWinner(data) {
         for (let j in WIN_POSITIONS[i]) {
             let id = WIN_POSITIONS[i][j];
             let index = data.indexOf(id);
-
             if (index == -1) {
                 gameEnded = false;
             }
@@ -96,6 +100,7 @@ function restartGame() {
     for (let i = 0; i < cells.length; i++) {
         cells[i].innerHTML = '';
     }
+    player = 'X';
     updateStats();
 }
 //Установка игрока и победителя по умолчанию (для сброса игры)
@@ -125,3 +130,8 @@ function updateStatsData() {
     }
 }
 updateStatsData();
+
+//Очистка статистики (по клику)
+clearStatsBtn.addEventListener('click', () => {
+    clearStats(stats);
+});
