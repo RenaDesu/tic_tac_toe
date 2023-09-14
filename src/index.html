@@ -22,11 +22,13 @@
     <div class="container">
       <div class="wrapper wrapper--center">
 
-        <section class="table">
+        <div class="table">
+          <div class="table__wrapper">
+            <p class="table__text">Победил: <span class="table__text-player" data-winner></span></p>
+            <p class="table__text">Ходит: <span class="table__text-player" data-player>X</span></p>
+          </div>
 
-          <p class="table__text" data-winner>Победил:</p>
-
-          <table class="table__table">
+          <table class="table__table" data-game-board>
             <tr class="table__row">
               <td class="table__cell" id="1"></td>
               <td class="table__cell" id="2"></td>
@@ -44,8 +46,32 @@
             </tr>
           </table>
 
-          <button class="table__button button" type="button">Начать сначала</button>
-        </section>
+          <button class="table__button button" data-restart type="button">Начать сначала</button>
+        </div>
+
+        <div class="stats">
+          <table class="stats__table">
+            <thead class="stats__table-head">
+              <th class="stats__table-heading" colspan="2">Статистика игры</th>
+            </thead>
+            <tbody class="stats__table-body">
+              <tr class="stats__table-row">
+                <td class="stats__cell stats__cell--heading">X</td>
+                <td class="stats__cell stats__cell--value" id="X">0</td>
+              </tr>
+              <tr class="stats__table-row">
+                <td class="stats__cell stats__cell--heading">O</td>
+                <td class="stats__cell stats__cell--value" id="O">0</td>
+              </tr>
+              <tr class="stats__table-row">
+                <td class="stats__cell stats__cell--heading">Ничья</td>
+                <td class="stats__cell stats__cell--value" id="D">0</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button class="stats__button button" data-clear type="button">Очистить статистику</button>
+        </div>
 
       </div>
     </div>

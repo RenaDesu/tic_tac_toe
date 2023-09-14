@@ -15,3 +15,4 @@ import '../index.html';
 import '../assets/css/style.css';
 
 import './modules/game-core';
+import './modules/localstorage';

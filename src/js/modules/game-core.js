@@ -1,8 +1,12 @@
 const winner = document.querySelector('[data-winner]');
 const cells = document.querySelectorAll('.table__cell');
+const gameBoard = document.querySelector('[data-game-board]');
+const currentPlayer = document.querySelector('[data-player]');
+const restartBtn = document.querySelector('[data-restart]');
 
+//Игрок по умолчанию
 let player = 'X';
-let gameEnded = false;
+//Позиции, которые должен занять игрок для победы
 const WIN_POSITIONS = [
     [1, 2, 3],
     [4, 5, 6],
@@ -13,18 +17,28 @@ const WIN_POSITIONS = [
     [1, 5, 9],
     [3, 5, 7]
 ];
-
-for (let i = 0; i < cells.length; i++) {
-
-    cells[i].addEventListener('click', fillCells, false);
+//Статистика игр
+const stats = {
+    'X': 0,
+    'O': 0,
+    'D': 0
 }
-
-function fillCells() {
+//Ставим общий обработчик на таблицу и отлавливаем клик на ячейки
+gameBoard.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.classList.contains('table__cell')) {
+        fillCells(target);
+    }
+});
+//Заполняем ячейки, отслеживаем ход игры, выводим победителя или ничью
+function fillCells(el) {
     let data = [];
 
-    if (!this.innerHTML) {
-        this.innerHTML = player;
-        this.classList.add('symbol');
+    if (!el.innerHTML) {
+        el.innerHTML = player;
+        el.classList.add('symbol');
+    } else {
+        return;
     }
 
     for (let i in cells) {
@@ -34,13 +48,31 @@ function fillCells() {
     }
 
     if (detectWinner(data)) {
-        winner.innerText = `${winner.innerText} ${player}`;
+        stats[player] += 1;
+        winner.innerText = player;
+        setTimeout(restartGame, 3000);
+        setTimeout(clearText, 3000);
+    } else {
+        let draw = true;
+
+        for (let i in cells) {
+            if (cells[i].innerHTML == '') {
+                draw = false;
+            }
+        }
+        if (draw) {
+            stats.D += 1;
+            winner.innerText = 'ничья!';
+            setTimeout(restartGame, 3000);
+            setTimeout(clearText, 3000);
+        }
     }
 
     player = player == 'X' ? 'O' : 'X';
+    currentPlayer.innerHTML = player;
 }
 
-
+//Определяем конец игры и победителя 
 function detectWinner(data) {
     for (let i in WIN_POSITIONS) {
         let gameEnded = true;
@@ -59,3 +91,37 @@ function detectWinner(data) {
 
     return false;
 }
+//Ничинаем игру заново и выводим статистику игры
+function restartGame() {
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].innerHTML = '';
+    }
+    updateStats();
+}
+//Установка игрока и победителя по умолчанию (для сброса игры)
+function clearText() {
+    winner.innerText = '';
+    currentPlayer.innerHTML = 'X';
+}
+//Вывод статистики игры
+function updateStats() {
+    document.querySelector('#X').innerHTML = stats.X;
+    document.querySelector('#O').innerHTML = stats.O;
+    document.querySelector('#D').innerHTML = stats.D;
+    localStorage.setItem('GameStats', JSON.stringify(stats));
+}
+//Сброс игры по клику
+restartBtn.addEventListener('click', () => {
+    restartGame();
+    clearText();
+});
+//Обновление статистики
+function updateStatsData() {
+    if (localStorage.getItem('GameStats') != null) {
+        const statsData = JSON.parse(localStorage.getItem('GameStats'));
+        stats.X = statsData.X;
+        stats.O = statsData.O;
+        stats.D = statsData.D;
+    }
+}
+updateStatsData();

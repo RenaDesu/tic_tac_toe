@@ -159,6 +159,7 @@ ol {
 .wrapper--center {
     align-items: center;
     justify-content: center;
+    column-gap: 40px;
 }
 
 .wrapper--column {
@@ -199,19 +200,33 @@ ol {
     row-gap: 20px;
 }
 
+.table__wrapper {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 5px;
+}
+
 .table__table {
     margin: 0 auto;
 
     border-collapse: collapse;
+    border: 3px solid #ad43eb;
 }
 
 .table__text {
     margin: 0;
 
+    width: 50%;
+
     font-size: 18px;
     line-height: 28px;
     font-weight: 500;
     color: #ad43eb;
+}
+
+.table__text-player {
+    font-size: 20px;
+    line-height: 30px;
 }
 
 .table__cell {
@@ -242,6 +257,43 @@ ol {
     font-weight: 500;
     font-size: 70px;
     color: #ad43eb;
+}
+
+.stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+}
+
+.stats__table {
+    width: 170px;
+    height: 170px;
+
+    padding: 10px;
+
+    color: #661296;
+
+    border-collapse: collapse;
+    border: 3px solid #ad43eb;
+}
+
+.stats__table-heading {
+    font-weight: 500;
+}
+
+.stats__table-heading,
+.stats__cell {
+    padding: 10px;
+    border: 2px solid #ad43eb;
+}
+
+.stats__cell--heading {
+    font-weight: 500;
+}
+
+.stats__cell--value {
+    text-align: center;
 }
 
 .footer {
