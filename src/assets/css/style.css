@@ -141,6 +141,22 @@ ol {
     background-color: #c17cea;
 }
 
+.button--mode {
+    width: 170px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button--mode-active,
+.button--mode-active:hover,
+.button--mode-active:focus,
+.button--mode-active:active {
+    background-color: #c17cea;
+    outline: 3px solid #ad43eb;
+}
+
 .container {
     width: 100%;
     max-width: calc(1240px + 2 * 20px);
@@ -191,6 +207,11 @@ ol {
     background-image: linear-gradient(to right, #d3a2ef, 50%, #ad43eb);
 }
 
+.mode {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
 
 .table {
     padding: 30px 0;
@@ -202,7 +223,7 @@ ol {
 
 .table__wrapper {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     column-gap: 5px;
 }
 
@@ -216,12 +237,26 @@ ol {
 .table__text {
     margin: 0;
 
-    width: 50%;
-
     font-size: 18px;
     line-height: 28px;
     font-weight: 500;
     color: #ad43eb;
+}
+
+.table__text--active {
+    position: fixed;
+    top: 120px;
+    left: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 5px;
+    z-index: 100;
+    width: 60%;
+    height: 70%;
+    background-color: white;
+
+    border: 3px solid #ad43eb;
 }
 
 .table__text-player {

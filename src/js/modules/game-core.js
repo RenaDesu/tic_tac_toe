@@ -3,11 +3,19 @@ import {
 } from "./localstorage";
 
 const winner = document.querySelector('[data-winner]');
+const winnerContainer = document.querySelector('[data-winner-container]');
 const cells = document.querySelectorAll('.table__cell');
 const gameBoard = document.querySelector('[data-game-board]');
 const currentPlayer = document.querySelector('[data-player]');
 const restartBtn = document.querySelector('[data-restart]');
 const clearStatsBtn = document.querySelector('[data-clear]');
+const botModeBtn = document.querySelector('[data-bot-mode]');
+const playerModeBtn = document.querySelector('[data-player-mode]');
+
+//Создаем массив для поиска пустых ячеек для режима с ботом
+const cellsArr = Array.from(cells);
+//Переключатель режима с ботом
+let botMode = false;
 
 //Игрок по умолчанию
 let player = 'X';
@@ -32,7 +40,11 @@ const stats = {
 gameBoard.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('table__cell')) {
-        fillCells(target);
+        if (botMode == false) {
+            fillCells(target);
+        } else {
+            fillCellsBotMode(target);
+        }
     }
 });
 //Заполняем ячейки, отслеживаем ход игры, выводим победителя или ничью
@@ -55,6 +67,7 @@ function fillCells(el) {
     if (detectWinner(data)) {
         stats[player] += 1;
         winner.innerText = player;
+        setTimeout(showPlayer, 1000);
         setTimeout(restartGame, 3000);
         setTimeout(clearText, 3000);
     } else {
@@ -68,12 +81,102 @@ function fillCells(el) {
         if (draw) {
             stats.D += 1;
             winner.innerText = 'ничья!';
+            setTimeout(showPlayer, 1000);
             setTimeout(restartGame, 3000);
             setTimeout(clearText, 3000);
         }
     }
 
     player = player == 'X' ? 'O' : 'X';
+    currentPlayer.innerHTML = player;
+}
+
+//Заполняем ячейки, отслеживаем ход игры, выводим победителя или ничью (режим с ботом)
+function fillCellsBotMode(el) {
+    let data = [];
+
+    if (!el.innerHTML && player == 'X') {
+        el.innerHTML = player;
+        el.classList.add('symbol');
+    } else {
+        return;
+    }
+
+    for (let i in cells) {
+        if (cells[i].innerHTML == player) {
+            data.push(parseInt(cells[i].id));
+        }
+    }
+
+    if (detectWinner(data)) {
+        stats[player] += 1;
+        winner.innerText = player;
+        setTimeout(showPlayer, 1000);
+        setTimeout(restartGame, 3000);
+        setTimeout(clearText, 3000);
+    } else {
+        let draw = true;
+
+        for (let i in cells) {
+            if (cells[i].innerHTML == '') {
+                draw = false;
+            }
+        }
+        if (draw) {
+            stats.D += 1;
+            winner.innerText = 'ничья!';
+            setTimeout(showPlayer, 1000);
+            setTimeout(restartGame, 3000);
+            setTimeout(clearText, 3000);
+        }
+    }
+
+    player = 'O';
+    currentPlayer.innerHTML = player;
+    setTimeout(makeBotMove, 1000, el);
+
+}
+//Логика бота
+function makeBotMove(el) {
+    const emptyCells = cellsArr.filter((cell) => cell.innerHTML == '');
+    let data = [];
+
+    if (emptyCells.length > 0 && player == 'O') {
+        const randomIndex = Math.floor(Math.random() * emptyCells.length);
+        const botCell = emptyCells[randomIndex];
+        botCell.innerHTML = player;
+        botCell.classList.add('symbol');
+
+        for (let i in cells) {
+            if (cells[i].innerHTML == player) {
+                data.push(parseInt(cells[i].id));
+            }
+        }
+
+        if (detectWinner(data)) {
+            stats[player] += 1;
+            winner.innerText = player;
+            setTimeout(showPlayer, 1000);
+            setTimeout(restartGame, 3000);
+            setTimeout(clearText, 3000);
+        } else {
+            let draw = true;
+
+            for (let i in cells) {
+                if (cells[i].innerHTML == '') {
+                    draw = false;
+                }
+            }
+            if (draw) {
+                stats.D += 1;
+                winner.innerText = 'ничья!';
+                setTimeout(showPlayer, 1000);
+                setTimeout(restartGame, 3000);
+                setTimeout(clearText, 3000);
+            }
+        }
+    }
+    player = 'X';
     currentPlayer.innerHTML = player;
 }
 
@@ -107,6 +210,8 @@ function restartGame() {
 function clearText() {
     winner.innerText = '';
     currentPlayer.innerHTML = 'X';
+    winnerContainer.classList.add('visually-hidden');
+    winnerContainer.classList.remove('table__text--active');
 }
 //Вывод статистики игры
 function updateStats() {
@@ -135,3 +240,37 @@ updateStatsData();
 clearStatsBtn.addEventListener('click', () => {
     clearStats(stats);
 });
+
+//Включает режим с ботом
+function setBotMode() {
+    if (botMode == false) {
+        botMode = true;
+        botModeBtn.classList.add('button--mode-active');
+        playerModeBtn.classList.remove('button--mode-active');
+    } else {
+        return
+    }
+}
+//Включает режим игрок-игрок
+function setPlayerMode() {
+    if (botMode == true) {
+        botMode = false;
+        playerModeBtn.classList.add('button--mode-active');
+        botModeBtn.classList.remove('button--mode-active');
+    } else {
+        return
+    }
+}
+//Включает режим с ботом
+botModeBtn.addEventListener('click', (e) => {
+    setBotMode();
+});
+//Включает режим игрок-игрок
+playerModeBtn.addEventListener('click', (e) => {
+    setPlayerMode();
+});
+//Показ "модалки" с победителем
+function showPlayer() {
+    winnerContainer.classList.remove('visually-hidden');
+    winnerContainer.classList.add('table__text--active');
+}

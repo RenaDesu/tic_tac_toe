@@ -22,9 +22,20 @@
     <div class="container">
       <div class="wrapper wrapper--center">
 
+        <div class="mode">
+          <button class="button button--mode button--mode-active" data-player-mode type="button">
+            <span>Режим:</span>
+            <span>Игрок-Игрок</span>
+          </button>
+          <button class="button button--mode" data-bot-mode type="button">
+            <span>Режим:</span>
+            <span>Игрок-Бот</span>
+          </button>
+        </div>
+
         <div class="table">
           <div class="table__wrapper">
-            <p class="table__text">Победил: <span class="table__text-player" data-winner></span></p>
+            <p class="table__text visually-hidden" data-winner-container>Победил: <span class="table__text-player" data-winner>X</span></p>
             <p class="table__text">Ходит: <span class="table__text-player" data-player>X</span></p>
           </div>
 
